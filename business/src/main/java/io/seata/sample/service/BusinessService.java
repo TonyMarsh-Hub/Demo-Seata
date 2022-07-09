@@ -6,6 +6,7 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
@@ -39,5 +40,14 @@ public class BusinessService {
         }
         Map<String, Object> storageMap = jdbcTemplate.queryForMap("select * from storage_tbl where commodity_code='C100000'");
         return Integer.parseInt(storageMap.get("count").toString()) >= 0;
+    }
+
+    @PostConstruct
+    public void initData() {
+        jdbcTemplate.update("delete from account_tbl");
+        jdbcTemplate.update("delete from order_tbl");
+        jdbcTemplate.update("delete from storage_tbl");
+        jdbcTemplate.update("insert into account_tbl(user_id,money) values('U100000','10000') ");
+        jdbcTemplate.update("insert into storage_tbl(commodity_code,count) values('C100000','200') ");
     }
 }
