@@ -15,12 +15,29 @@ public class BusinessController {
     /**
      * 购买下单，模拟全局事务提交
      *
-     * @return 提交结果
+     * @return 结果
      */
     @RequestMapping(value = "/purchase/commit", produces = "application/json")
     public String purchaseCommit() {
         try {
             service.purchase("U100000", "C100000", 30);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "全局事务提交";
+    }
+
+
+    /**
+     * 购买下单，模拟全局事务回滚
+     * 账户或库存不足
+     *
+     * @return 结果
+     */
+    @RequestMapping("/purchase/rollback")
+    public String purchaseRollback() {
+        try {
+            service.purchase("U100000", "C100000", 99999);
         } catch (Exception e) {
             return e.getMessage();
         }
